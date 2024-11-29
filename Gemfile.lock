@@ -91,6 +91,8 @@ GEM
     crass (1.0.6)
     date (3.4.0)
     diff-lcs (1.5.1)
+    discard (1.4.0)
+      activerecord (>= 4.2, < 9.0)
     dotenv (3.1.4)
     dotenv-rails (3.1.4)
       dotenv (= 3.1.4)
@@ -347,6 +349,7 @@ DEPENDENCIES
   bootsnap
   bullet
   byebug
+  discard
   dotenv-rails
   factory_bot_rails
   faker

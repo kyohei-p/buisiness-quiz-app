@@ -44,7 +44,11 @@ gem 'kaminari'
 gem 'omniauth-auth0'
 gem 'omniauth-rails_csrf_protection'
 
+# dotenv
 gem 'dotenv-rails'
+
+# soft delete
+gem 'discard'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

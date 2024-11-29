@@ -32,11 +32,6 @@ ActiveRecord::ConnectionNotEstablished: Can't connect to local server through so
 docker-compose run --rm api rails generate rspec:install
 ```
 
-### Minitest用のtestディレクトリは不要なら削除
-```
-rm -rf test
-```
-
 ## 動作確認
 http://localhost:3000 にアクセスし、Railsの初期ページが表示されることを確認
 
