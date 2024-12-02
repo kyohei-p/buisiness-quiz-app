@@ -1,19 +1,19 @@
 class Api::Users::SessionsController < ApplicationController
-  skip_before_action :login_required, only: [:new, :create]
-  require 'omniauth-auth0'
-  require 'uri'
-  require 'cgi'
-  require 'net/http'
-  require 'openssl'
+  skip_before_action :login_required, only: [ :new, :create ]
+  require "omniauth-auth0"
+  require "uri"
+  require "cgi"
+  require "net/http"
+  require "openssl"
 
   def create
     user = User.find_by(email: params[:email].downcase)
     if user && user.authenticate(params[:password])
       # auth0_login #TODO: フロント実装時に対応
-      render json: { status: 'SUCCESS', message: 'ログインに成功しました', data: user }, status: 200
+      render json: { status: "SUCCESS", message: "ログインに成功しました", data: user }, status: 200
     else
-      errors = ['メールアドレスかパスワードが間違っています']
-      render json: { status: 'ERROR', message: 'ログインに失敗しました', errors: errors }, status: 401
+      errors = [ "メールアドレスかパスワードが間違っています" ]
+      render json: { status: "ERROR", message: "ログインに失敗しました", errors: errors }, status: 401
     end
   end
 
@@ -22,12 +22,12 @@ class Api::Users::SessionsController < ApplicationController
 
   def destroy
     session[:user_id] = nil
-    render json: { status: 200, message: 'ログアウトしました' }, status: 200
+    render json: { status: 200, message: "ログアウトしました" }, status: 200
   end
 
   private
 
-  #TODO: フロント実装時に対応
+  # TODO: フロント実装時に対応
   # def auth0_login
   #   domain = ENV['AUTH0_DOMAIN']
   #   client_id = ENV['AUTH0_CLIENT_ID']

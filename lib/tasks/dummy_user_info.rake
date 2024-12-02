@@ -3,8 +3,8 @@ namespace :dummy do
   task user_info: :environment do
     begin
       users = [
-        { name: 'test1', email: 'test1@example.com', password: 'test1password', auth0_id: ENV['AUTH_ID1'], is_admin: false },
-        { name: 'administrator', email: 'admin@example.com', password: 'adminpassword123', auth0_id: ENV['ADMIN_AUTH_ID'], is_admin: true }
+        { name: "test1", email: "test1@example.com", password: "test1password", auth0_id: ENV["AUTH_ID1"], is_admin: false },
+        { name: "administrator", email: "admin@example.com", password: "adminpassword123", auth0_id: ENV["ADMIN_AUTH_ID"], is_admin: true }
       ]
 
       users.each do |user|
