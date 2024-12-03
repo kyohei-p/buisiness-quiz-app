@@ -20,9 +20,9 @@ default: &default
 development:
   <<: *default
   database: buisiness_quiz_app_development
-  host: db
-  username: root
-  password: password
+  # host: db
+  # username: root
+  # password: password
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -30,9 +30,9 @@ development:
 test:
   <<: *default
   database: buisiness_quiz_app_test
-  host: db
-  username: root
-  password: password
+  # host: db
+  # username: root
+  # password: password
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -54,8 +54,8 @@ test:
 # Read https://guides.rubyonrails.org/configuring.html#configuring-a-database
 # for a full overview on how database connection configuration can be specified.
 #
-production:
-  <<: *default
-  database: buisiness_quiz_app_production
-  username: buisiness_quiz_app
-  password: <%= ENV["BUISINESS_QUIZ_APP_DATABASE_PASSWORD"] %>
+# production:
+#   <<: *default
+#   database: buisiness_quiz_app_production
+#   username: buisiness_quiz_app
+#   password: <%= ENV["BUISINESS_QUIZ_APP_DATABASE_PASSWORD"] %>
