@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-source 'https://rubygems.org'
+source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.2.6'
+ruby "3.2.6"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.2.2"
@@ -35,39 +35,55 @@ gem "image_processing", "~> 1.2"
 gem "rack-cors"
 
 # global
-gem 'global'
+gem "global"
 
 # pagination
-gem 'kaminari'
+gem "kaminari"
+
+# auth0
+gem "omniauth-auth0"
+gem "omniauth-rails_csrf_protection"
+
+# dotenv
+gem "dotenv-rails"
+
+# soft delete
+gem "discard"
+
+# others
+gem "rest-client"
+gem "httpclient"
+gem "brakeman"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  gem "byebug", platforms: %i[mri mingw x64_mingw]
 
-  gem 'bullet'
+  gem "bullet"
 
-  gem 'rails-erd'
+  gem "rails-erd"
 
   # debug
-  gem 'pry-rails'
+  gem "pry-rails"
 
-    # linter/formatter
+  # linter/formatter
   # rubocop:disable Bundler/OrderedGems
-  gem 'rubocop', require: false # only for ruby
-  gem 'rubocop-rails', require: false
-  gem 'rubocop-rspec', require: false
-  gem 'rubocop-performance', require: false
+  gem "rubocop", require: false # only for ruby
+  gem "rubocop-rails", require: false
+  gem "rubocop-rspec", require: false
+  gem "rubocop-performance", require: false
+  gem "rubocop-rails-omakase"
 
-  # Use dummy_candidate_info
-  gem 'gimei'
+  gem "gimei"
 end
 
 group :test do
-  # rspec
-  gem 'rspec-rails'
-
   # support
-  gem 'factory_bot_rails'
-  gem 'faker'
-  gem 'shoulda-matchers'
+  gem "factory_bot_rails"
+  gem "faker"
+  gem "shoulda-matchers"
+  gem "capybara"
+  gem "selenium-webdriver"
+  # rspec
+  gem "rspec-rails"
 end

@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  auth0_id: MyString
+  string: MyString
+  name: MyString
+  email: MyString
+  password_digest: MyString
+  is_admin: false
+  discarded_at: 2024-11-29 23:29:33
+
+two:
+  auth0_id: MyString
+  string: MyString
+  name: MyString
+  email: MyString
+  password_digest: MyString
+  is_admin: false
+  discarded_at: 2024-11-29 23:29:33
