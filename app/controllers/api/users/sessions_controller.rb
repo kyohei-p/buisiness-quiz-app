@@ -7,9 +7,10 @@ class Api::Users::SessionsController < ApplicationController
   require "openssl"
 
   def create
-    user = User.find_by(email: params[:email].downcase)
+    user = User.find_by(email: params[:email])
     if user && user.authenticate(params[:password])
       # auth0_login #TODO: フロント実装時に対応
+      log_in(user)
       render json: { status: "SUCCESS", message: "ログインに成功しました", data: user }, status: 200
     else
       errors = [ "メールアドレスかパスワードが間違っています" ]
@@ -21,8 +22,12 @@ class Api::Users::SessionsController < ApplicationController
   end
 
   def destroy
-    session[:user_id] = nil
-    render json: { status: 200, message: "ログアウトしました" }, status: 200
+    if session[:user_id]
+      session.delete(:user_id)
+      render json: { status: "SUCCESS", message: "ログアウトしました" }, status: 200
+    else
+      render json: { status: "ERROR", message: "ログアウト失敗しました" }, status: 401
+    end
   end
 
   private

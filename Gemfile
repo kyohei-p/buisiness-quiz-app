@@ -74,16 +74,16 @@ group :development, :test do
   gem "rubocop-performance", require: false
   gem "rubocop-rails-omakase"
 
-  # Use dummy_candidate_info
   gem "gimei"
 end
 
 group :test do
-  # rspec
-  gem "rspec-rails"
-
   # support
   gem "factory_bot_rails"
   gem "faker"
   gem "shoulda-matchers"
+  gem "capybara"
+  gem "selenium-webdriver"
+  # rspec
+  gem "rspec-rails"
 end
