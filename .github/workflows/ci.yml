@@ -1,85 +1,83 @@
 name: CI
 
 on:
-  pull_request:
   push:
-    branches: [ main ]
+    branches:
+      - main
+      - develop
+    paths-ignore:
+      - README.md
+  pull_request:
+    types: ['opened', 'edited', 'reopened', 'synchronize', 'ready_for_review']
+    branches:
+      - main
+      - develop
+    paths-ignore:
+      - README.md
 
 jobs:
-  scan_ruby:
+  rspec:
+    if: ${{ github.event.pull_request.draft == false }}
     runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: .ruby-version
-          bundler-cache: true
-
-      - name: Scan for common Rails security vulnerabilities using static analysis
-        run: bin/brakeman --no-pager
-
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: .ruby-version
-          bundler-cache: true
-
-      - name: Lint code for consistent style
-        run: bin/rubocop -f github
-
-  test:
-    runs-on: ubuntu-latest
-
+    timeout-minutes: 10
     services:
       mysql:
-        image: mysql
-        env:
-          MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: buisiness_quiz_app_test
+        image: mysql:8.0.25
         ports:
           - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-
-      # redis:
-      #   image: redis
-      #   ports:
-      #     - 6379:6379
-      #   options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+        options: --health-cmd "mysqladmin ping" --health-interval 10s --health-timeout 5s --health-retries 10
 
     steps:
-      - name: Install packages
-        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y google-chrome-stable curl default-mysql-client libjemalloc2 libvips
-
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: .ruby-version
           bundler-cache: true
 
-      - name: Run tests
-        env:
-          RAILS_ENV: test
-          DATABASE_URL: mysql2://127.0.0.1:3306
-          # REDIS_URL: redis://localhost:6379/0
-        run: bin/rspec spec/system
-
-      - name: Keep screenshots from failed system tests
-        uses: actions/upload-artifact@v4
-        if: failure()
+      - name: Cache node modules
+        uses: actions/cache@v3
         with:
-          name: screenshots
-          path: ${{ github.workspace }}/tmp/screenshots
-          if-no-files-found: ignore
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Bundler and gem install
+        run: |
+          gem install bundler
+          bundle install --jobs 4 --retry 3 --path vendor/bundle
+
+      - name: Yarn install
+        run: yarn install --check-files
+
+      - name: Database create and migrate
+        run: |
+          cp config/database.yml.ci config/database.yml
+          bundle exec rails db:create RAILS_ENV=test
+          bundle exec rails db:migrate RAILS_ENV=test
+
+      - name: Run rspec
+        env:
+          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+        run: bundle exec rspec
+
+  rubocop:
+    if: ${{ github.event.pull_request.draft == false }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.0.3
+          bundler-cache: true
+
+      - name: Run rubocop
+        run: bundle exec rubocop
