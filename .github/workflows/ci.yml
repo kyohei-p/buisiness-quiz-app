@@ -56,7 +56,6 @@ jobs:
 
       - name: Database create and migrate
         run: |
-          cp config/database.yml.ci config/database.yml
           bundle exec rails db:create RAILS_ENV=test
           bundle exec rails db:migrate RAILS_ENV=test
 
@@ -76,7 +75,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.0.3
+          ruby-version: 3.2.6
           bundler-cache: true
 
       - name: Run rubocop
