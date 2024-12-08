@@ -11,7 +11,7 @@ RSpec.describe 'Sessions', type: :system do
     end
 
     it 'Login fails when user information is invalid' do
-      post api_users_login_path, params: { user: { email: "test@example.com", password: "password" }}
+      post api_users_login_path, params: { user: { email: "test@example.com", password: "password" } }
       expect(response).to have_http_status(401)
     end
   end
