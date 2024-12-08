@@ -1,6 +1,6 @@
 name: CI
-
 on:
+  pull_request:
   push:
     branches:
       - main
@@ -14,59 +14,31 @@ on:
       - develop
     paths-ignore:
       - README.md
-
 jobs:
-  rspec:
-    if: ${{ github.event.pull_request.draft == false }}
+  scan_ruby:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-    services:
-      mysql:
-        image: mysql:8.0.25
-        ports:
-          - 3306:3306
-        env:
-          MYSQL_ALLOW_EMPTY_PASSWORD: yes
-          MYSQL_ROOT_PASSWORD: password
-          MYSQL_USER: root
-          MYSQL_DATABASE: buisiness_quiz_app_test
-        options: --health-cmd "mysqladmin ping" --health-interval 10s --health-timeout 5s --health-retries 10
-
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
-
+        uses: actions/checkout@v4
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
+          ruby-version: .ruby-version
           bundler-cache: true
-
-      - name: Cache node modules
-        uses: actions/cache@v3
+      - name: Scan for common Rails security vulnerabilities using static analysis
+        run: bin/brakeman --no-pager
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
         with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      - name: Bundler and gem install
-        run: |
-          gem install bundler
-          bundle install --jobs 4 --retry 3 --path vendor/bundle
-
-      - name: Yarn install
-        run: yarn install --check-files
-
-      - name: Database create and migrate
-        run: |
-          bundle exec rails db:create RAILS_ENV=test
-          bundle exec rails db:migrate RAILS_ENV=test
-
-      - name: Run rspec
-        env:
-          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
-        run: bundle exec rspec
-
+          ruby-version: .ruby-version
+          bundler-cache: true
+      - name: Lint code for consistent style
+        run: bin/rubocop -f github
   rubocop:
     if: ${{ github.event.pull_request.draft == false }}
     runs-on: ubuntu-latest
