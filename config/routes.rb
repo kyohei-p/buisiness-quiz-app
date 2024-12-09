@@ -8,6 +8,8 @@ Rails.application.routes.draw do
       get "/auth/auth0/callback" => "auth0#create"
       get "/auth/failure" => "auth0#failure"
       get "/auth/logout" => "auth0#logout"
+
+      resources :categories
     end
   end
 end
