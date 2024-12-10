@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   namespace "api" do
-    namespace "users" do
+    namespace "v1" do
       get "/login", to: "sessions#new"
       post "/login", to: "sessions#create"
       delete "/logout", to: "sessions#destroy", as: :logout
@@ -9,7 +9,11 @@ Rails.application.routes.draw do
       get "/auth/failure" => "auth0#failure"
       get "/auth/logout" => "auth0#logout"
 
-      resources :categories
+      resources :categories, only: [:index]
+
+      resources :users, only: [:create, :show, :update, :destroy] do
+        post 'categories/:id', to: 'categories#selected_category'
+      end
     end
   end
 end
