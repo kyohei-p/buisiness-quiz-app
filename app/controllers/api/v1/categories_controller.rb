@@ -13,21 +13,23 @@ class Api::V1::CategoriesController < ApplicationController
 
     if current_user && @category.present?
       user_category.save
-      render json: { status: 'SUCCESS', message: "選択したカテゴリーの保存に成功しました", data: user_category }, status: 200
+      render json: { status: 'SUCCESS', message: "選択したカテゴリーの保存に成功しました" }, status: 200
     else
       render json: { status: 'ERROR', message: "選択したカテゴリーの保存に失敗しました" }, status: 422
     end
   end
 
-  # def reset_category
-  #   user_category = UserCategory.find(params[:category_id])
+  def reset_category
+    user_category = UserCategory.find_by(user_id: params[:user_id], category_id: params[:category_id])
+    puts "uc: #{user_category}"
 
-  #   if current_user && user_category&.discard
-  #     render json: { status: 'SUCCESS', message: "カテゴリーの選択を解除しました", data: user_category }, status: 204
-  #   else
-  #     render json: { status: 'ERROR', message: "カテゴリーの選択解除に失敗しました" }, status: 422
-  #   end
-  # end
+    if current_user && user_category.present?
+      user_category&.discard
+      render json: { status: 'SUCCESS', message: "カテゴリーの選択を解除しました", data: user_category }, status: 204
+    else
+      render json: { status: 'ERROR', message: "カテゴリーの選択解除に失敗しました" }, status: 422
+    end
+  end
 
   private
 
