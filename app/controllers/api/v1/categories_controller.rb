@@ -1,6 +1,7 @@
 class Api::V1::CategoriesController < ApplicationController
   include SessionsHelper
-  before_action :logged_in, only: [:index, :selected_category]
+  before_action :logged_in, only: [:index, :selected_category, :reset_category]
+  before_action :set_category, only: [:selected_category]
 
   def index
     categories = Category.all.order(created_at: "ASC")
@@ -8,24 +9,31 @@ class Api::V1::CategoriesController < ApplicationController
   end
 
   def selected_category
-    find_category
+    set_category
     user_category = UserCategory.new(user_category_params)
 
-    if current_user && @category.present?
-      user_category.save
-      render json: { status: 'SUCCESS', message: "選択したカテゴリーの保存に成功しました" }, status: 200
+    reselect_category = UserCategory.with_discarded.find_by(user_category_params)
+
+    # カテゴリーを再選択する
+    if reselect_category.discarded?
+      reselect_category.undiscard!
+      render json: { status: 'SUCCESS', message: "再度選択したカテゴリーを保存しました", data: reselect_category }, status: 200
     else
-      render json: { status: 'ERROR', message: "選択したカテゴリーの保存に失敗しました" }, status: 422
+      # 最初のカテゴリー選択
+      if user_category.save
+        render json: { status: 'SUCCESS', message: "選択したカテゴリーを保存しました", data: user_category }, status: 200
+      else
+        render json: { status: 'ERROR', message: "選択したカテゴリーの保存に失敗しました" }, status: 422
+      end
     end
   end
 
   def reset_category
-    user_category = UserCategory.find_by(user_id: params[:user_id], category_id: params[:category_id])
-    puts "uc: #{user_category}"
+    user_category = UserCategory.find_by(user_category_params)
 
-    if current_user && user_category.present?
-      user_category&.discard
-      render json: { status: 'SUCCESS', message: "カテゴリーの選択を解除しました", data: user_category }, status: 204
+    if user_category.present?
+      user_category.discard
+      render json: { status: 'SUCCESS', message: "カテゴリーの選択を解除しました" }, status: 204
     else
       render json: { status: 'ERROR', message: "カテゴリーの選択解除に失敗しました" }, status: 422
     end
@@ -33,7 +41,7 @@ class Api::V1::CategoriesController < ApplicationController
 
   private
 
-  def find_category
+  def set_category
     @category = Category.find(params[:category_id])
   end
 

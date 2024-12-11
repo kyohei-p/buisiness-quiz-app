@@ -13,7 +13,7 @@ Rails.application.routes.draw do
 
       resources :users, only: [:create, :show, :update, :destroy] do
         post 'categories/:id', to: 'categories#selected_category'
-        delete 'categories/:id', to: 'categories#reset_category'
+        patch 'categories/:id', to: 'categories#reset_category'
       end
     end
   end
