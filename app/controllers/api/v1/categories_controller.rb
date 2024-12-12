@@ -32,7 +32,7 @@ class Api::V1::CategoriesController < ApplicationController
 
     if user_category.present?
       user_category.discard
-      render json: { status: 'SUCCESS', message: "カテゴリーの選択を解除しました" }, status: 204
+      render json: { status: 'SUCCESS', message: "カテゴリーの選択を解除しました", data: user_category }, status: 200
     else
       render json: { status: 'ERROR', message: "カテゴリーの選択解除に失敗しました" }, status: 422
     end
@@ -41,7 +41,7 @@ class Api::V1::CategoriesController < ApplicationController
   private
 
   def set_category
-    @category = Category.find(params[:category_id])
+    category = Category.find(params[:category_id])
   end
 
   def user_category_params
