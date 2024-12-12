@@ -13,17 +13,15 @@ class Api::V1::CategoriesController < ApplicationController
 
     reselect_category = UserCategory.with_discarded.find_by(user_category_params)
 
-    # カテゴリーを再選択する
-    if reselect_category.discarded?
+    # カテゴリーの再選択
+    if reselect_category.present?
       reselect_category.undiscard!
       render json: { status: 'SUCCESS', message: "再度選択したカテゴリーを保存しました", data: reselect_category }, status: 200
+    # 初回のカテゴリー選択
+    elsif user_category.save!
+      render json: { status: 'SUCCESS', message: "選択したカテゴリーを保存しました", data: user_category }, status: 200
     else
-      # 最初のカテゴリー選択
-      if user_category.save
-        render json: { status: 'SUCCESS', message: "選択したカテゴリーを保存しました", data: user_category }, status: 200
-      else
-        render json: { status: 'ERROR', message: "選択したカテゴリーの保存に失敗しました" }, status: 422
-      end
+      render json: { status: 'ERROR', message: "選択したカテゴリーの保存に失敗しました" }, status: 422
     end
   end
 
