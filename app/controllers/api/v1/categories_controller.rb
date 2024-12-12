@@ -1,6 +1,5 @@
 class Api::V1::CategoriesController < ApplicationController
-  include SessionsHelper
-  before_action :logged_in, only: [:index, :selected_category, :reset_category]
+  before_action :login_required, only: [:index, :selected_category, :reset_category]
   before_action :set_category, only: [:selected_category]
 
   def index
@@ -47,11 +46,5 @@ class Api::V1::CategoriesController < ApplicationController
 
   def user_category_params
     params.permit(:user_id, :category_id)
-  end
-
-  def logged_in
-    unless logged_in?
-      render json: { error: "ログインしてください" }, status: 401
-    end
   end
 end
