@@ -9,20 +9,26 @@ class Api::V1::CategoriesController < ApplicationController
 
   def selected_category
     set_category
+
     user_category = UserCategory.new(user_category_params)
+    reselected_category = UserCategory.with_discarded.find_by(user_category_params)
 
-    reselect_category = UserCategory.with_discarded.find_by(user_category_params)
+    if reselected_category.present?
+      reselected_category.undiscard!
+      category = reselected_category
+    else
+      category = user_category
+    end
 
-    # カテゴリーの再選択
-    if reselect_category.present?
-      reselect_category.undiscard!
-      render json: { status: 'SUCCESS', message: "再度選択したカテゴリーを保存しました", data: reselect_category }, status: 200
-    # 初回のカテゴリー選択
-    elsif user_category.save!
-      render json: { status: 'SUCCESS', message: "選択したカテゴリーを保存しました", data: user_category }, status: 200
+    if category.save!
+      render json: { status: 'SUCCESS', message: "選択したカテゴリーを保存しました", data: category }, status: 200
     else
       render json: { status: 'ERROR', message: "選択したカテゴリーの保存に失敗しました" }, status: 422
     end
+  rescue StandardError => e
+    puts e.class
+    puts e.message
+    render json: { status: 'ERROR', message: "例外エラーが発生しました", error: [e.class, e.message] }, status: 500
   end
 
   def reset_category
