@@ -13,21 +13,17 @@ class Api::V1::CategoriesController < ApplicationController
     user_category = UserCategory.new(user_category_params)
     reselected_category = UserCategory.with_discarded.find_by(user_category_params)
 
-    if reselected_category.present?
-      reselected_category.undiscard!
-      category = reselected_category
-    else
-      category = user_category
-    end
+    category = if reselected_category.present?
+                reselected_category.undiscard!
+                reselected_category
+              else
+                user_category
+              end
 
-    if category.save!
-      render json: { status: 'SUCCESS', message: "選択したカテゴリーを保存しました", data: category }, status: 200
-    else
-      render json: { status: 'ERROR', message: "選択したカテゴリーの保存に失敗しました" }, status: 422
-    end
+    return render_error(422, "選択したカテゴリーの保存に失敗しました") unless category.save!
+
+    render json: { status: 'SUCCESS', message: "選択したカテゴリーを保存しました", data: category }, status: 200
   rescue StandardError => e
-    puts e.class
-    puts e.message
     render json: { status: 'ERROR', message: "例外エラーが発生しました", error: [e.class, e.message] }, status: 500
   end
 
