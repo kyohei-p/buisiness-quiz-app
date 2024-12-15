@@ -6,6 +6,7 @@ class ApplicationController < ActionController::API
 
   def login_required
     unless logged_in?
+      render json: { message: "ログインしてください" }, status: 401
     end
   end
 end

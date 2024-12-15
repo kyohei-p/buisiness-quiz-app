@@ -2,6 +2,8 @@ ja:
   activerecord:
     models:
         user: ユーザー
+        category: カテゴリー
+        user_category: 選択カテゴリー
     attributes:
       user:
         name: "名前"
@@ -9,6 +11,11 @@ ja:
         password: "パスワード"
         auth0_id: "Auth0_ID"
         is_admin: "管理者権限"
+      category:
+        name: "カテゴリー名"
+      user_category:
+        user_id: "ユーザーID"
+        category_id: "カテゴリーID"
     errors:
       format: "%{attribute}%{message}"
       models:
@@ -25,6 +32,17 @@ ja:
             password:
               blank: "を入力してください。"
             auth0_id:
+              taken: "はすでに存在します"
+        category:
+          attributes:
+            name:
+              blank: "を入力してください。"
+              too_long: "は30文字以内で入力してください"
+        user_category:
+          attributes:
+            user_id:
+              taken: "はすでに存在します"
+            category_id:
               taken: "はすでに存在します"
       messages:
         required: "%{attribute}は必須項目です。"

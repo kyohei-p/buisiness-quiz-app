@@ -1,4 +1,7 @@
 class User < ApplicationRecord
+  has_many :user_categories
+  has_many :categories, through: :user_categories
+
   has_secure_password
 
   validates :name, presence: true, length: { maximum: 100 }

@@ -16,9 +16,9 @@ docker compose run --rm api rails db:create
 docker-compose run --rm api rails db:migrate
 ```
 
-## Seed作成
+## ダミーデータ作成
 ```
-docker compose run --rm api rails db:seed
+docker compose run --rm api rails dummy:all_data
 ```
 
 ### 注意点

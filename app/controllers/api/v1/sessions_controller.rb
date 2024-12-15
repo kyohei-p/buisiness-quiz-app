@@ -1,4 +1,4 @@
-class Api::Users::SessionsController < ApplicationController
+class Api::V1::SessionsController < ApplicationController
   skip_before_action :login_required, only: [ :new, :create ]
   require "omniauth-auth0"
   require "uri"
