@@ -4,7 +4,7 @@ class CreateQuizAnswers < ActiveRecord::Migration[7.2]
       t.string :quiz_option
       t.boolean :is_answer
       t.datetime :discarded_at
-      t.references :quiz_questions, null: false, foreign_key: true
+      t.references :quiz_question, null: false, foreign_key: true
 
       t.timestamps
     end

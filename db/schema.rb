@@ -22,10 +22,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_16_102134) do
     t.string "quiz_option"
     t.boolean "is_answer"
     t.datetime "discarded_at"
-    t.bigint "quiz_questions_id", null: false
+    t.bigint "quiz_question_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["quiz_questions_id"], name: "index_quiz_answers_on_quiz_questions_id"
+    t.index ["quiz_question_id"], name: "index_quiz_answers_on_quiz_question_id"
   end
 
   create_table "quiz_questions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -63,7 +63,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_16_102134) do
     t.index ["auth0_id", "email"], name: "index_users_on_auth0_id_and_email", unique: true
   end
 
-  add_foreign_key "quiz_answers", "quiz_questions", column: "quiz_questions_id"
+  add_foreign_key "quiz_answers", "quiz_questions"
   add_foreign_key "quiz_questions", "categories"
   add_foreign_key "quiz_questions", "users"
   add_foreign_key "user_categories", "categories"
