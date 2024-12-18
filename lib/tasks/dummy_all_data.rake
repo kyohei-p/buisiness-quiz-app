@@ -13,6 +13,12 @@ namespace :dummy do
       puts "--- dummy:categoryinfo ----"
       Rake::Task["dummy:category_info"].invoke
 
+      puts "--- dummy:quiz_question_info ----"
+      Rake::Task["dummy:quiz_question_info"].invoke
+
+      puts "--- dummy:quiz_answer_info ----"
+      Rake::Task["dummy:quiz_answer_info"].invoke
+
       puts "--- end ---"
     end
   end

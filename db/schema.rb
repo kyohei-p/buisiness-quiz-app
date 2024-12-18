@@ -10,12 +10,34 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_09_214348) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_16_102134) do
   create_table "categories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
     t.datetime "discarded_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "quiz_answers", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "quiz_option"
+    t.boolean "is_answer"
+    t.datetime "discarded_at"
+    t.bigint "quiz_question_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["quiz_question_id"], name: "index_quiz_answers_on_quiz_question_id"
+  end
+
+  create_table "quiz_questions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "title"
+    t.string "question"
+    t.datetime "discarded_at"
+    t.bigint "user_id", null: false
+    t.bigint "category_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_quiz_questions_on_category_id"
+    t.index ["user_id"], name: "index_quiz_questions_on_user_id"
   end
 
   create_table "user_categories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -41,6 +63,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_09_214348) do
     t.index ["auth0_id", "email"], name: "index_users_on_auth0_id_and_email", unique: true
   end
 
+  add_foreign_key "quiz_answers", "quiz_questions"
+  add_foreign_key "quiz_questions", "categories"
+  add_foreign_key "quiz_questions", "users"
   add_foreign_key "user_categories", "categories"
   add_foreign_key "user_categories", "users"
 end
