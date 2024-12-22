@@ -13,7 +13,7 @@ FactoryBot.define do
     end
 
     trait :listening do
-      { title: '雑談', question: '相手の話を傾聴するときに不適切な行動はどれか？', user_id: 2, category_id: 1 }
+      { title: '傾聴', question: '相手の話を傾聴するときに不適切な行動はどれか？', user_id: 2, category_id: 1 }
     end
 
     trait :report_communicate_consult do
