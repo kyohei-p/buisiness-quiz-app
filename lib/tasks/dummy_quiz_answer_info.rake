@@ -42,7 +42,11 @@ namespace :dummy do
         { quiz_option: "推し活", is_answer: false, quiz_question_id: 10 },
         { quiz_option: "家賃・光熱費", is_answer: false, quiz_question_id: 10 },
         { quiz_option: "健康・美容", is_answer: false, quiz_question_id: 10 },
-        { quiz_option: "SNSの映えを意識した買い物", is_answer: true, quiz_question_id: 10 } #正解
+        { quiz_option: "SNSの映えを意識した買い物", is_answer: true, quiz_question_id: 10 }, #正解
+        { quiz_option: "責任", is_answer: false, quiz_question_id: 11 },
+        { quiz_option: "プライバシー", is_answer: false, quiz_question_id: 11 },
+        { quiz_option: "課題", is_answer: true, quiz_question_id: 11 }, #正解
+        { quiz_option: "立場", is_answer: false, quiz_question_id: 11 },
       ]
 
       quiz_answers.each do |answer|

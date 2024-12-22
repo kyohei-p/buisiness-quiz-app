@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  namespace "api" do
-    namespace "v1" do
+  namespace :api do
+    namespace :v1 do
       get "/login", to: "sessions#new"
       post "/login", to: "sessions#create"
       delete "/logout", to: "sessions#destroy", as: :logout
@@ -14,6 +14,10 @@ Rails.application.routes.draw do
       resources :users, only: [:create, :show, :update, :destroy] do
         post 'categories/:id', to: 'categories#selected_category'
         patch 'categories/:id', to: 'categories#reset_category'
+      end
+
+      namespace :quiz do
+        resources :questions, only: [:index, :show]
       end
     end
   end
