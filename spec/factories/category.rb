@@ -1,23 +1,25 @@
 FactoryBot.define do
   factory :category do
+    discarded_at { nil }
+
     trait :communication do
-      { name: 'コミュニケーション', discarded_at: nil }
+      { name: 'コミュニケーション' }
     end
 
     trait :mind do
-      { name: 'マインド', discarded_at: nil }
+      { name: 'マインド' }
     end
 
     trait :business_skill do
-      { name: 'ビジネススキル', discarded_at: nil }
+      { name: 'ビジネススキル' }
     end
 
-    trait :monkey do
-      { name: 'お金', discarded_at: nil }
+    trait :money do
+      { name: 'お金' }
     end
 
     trait :psychology do
-      { name: '心理学', discarded_at: nil }
+      { name: '心理学' }
     end
   end
 end
