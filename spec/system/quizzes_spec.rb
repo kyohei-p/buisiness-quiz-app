@@ -21,9 +21,9 @@ RSpec.describe 'Quizzes', type: :system do
 
     it 'Display Failure Quiz Question and Options' do
       post api_v1_login_path, params: { email: user.email, password: user.password }
-      get api_v1_quiz_question_path(id: 1)
+      get api_v1_quiz_question_path(id: 1), params: { category_id: nil }
 
-      expect(response).to have_http_status(500)
+      expect(response).to have_http_status(422)
       expect(JSON.parse(response.body)['quiz_options']).to eq nil
     end
   end

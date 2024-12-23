@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_16_102134) do
+ActiveRecord::Schema[8.0].define(version: 2024_12_22_215324) do
   create_table "categories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
     t.datetime "discarded_at"
@@ -25,6 +25,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_16_102134) do
     t.bigint "quiz_question_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "explanation"
     t.index ["quiz_question_id"], name: "index_quiz_answers_on_quiz_question_id"
   end
 
